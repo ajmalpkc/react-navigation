@@ -200,7 +200,8 @@ export default function createNavigationContainer(Component) {
         }
       }
       _statefulContainerCount++;
-      Linking.addEventListener('url', this._handleOpenURL);
+      this.linkListener = Linking.addEventListener('url', this._handleOpenURL);
+      
 
       // Pull out anything that can impact state
       const { persistenceKey, uriPrefix, enableURLHandling } = this.props;
@@ -293,7 +294,8 @@ export default function createNavigationContainer(Component) {
 
     componentWillUnmount() {
       this._isMounted = false;
-      Linking.removeEventListener('url', this._handleOpenURL);
+      this.linkListener?.remove();
+      
       this.subs && this.subs.remove();
 
       if (this._isStateful()) {
